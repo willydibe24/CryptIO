@@ -1,0 +1,8 @@
+services:
+  cryptio:
+    container_name: cryptio
+    build:
+      context: .
+    ports:
+      - "127.0.0.1:3000:3000"
+    restart: unless-stopped

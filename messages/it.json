@@ -1,0 +1,62 @@
+{
+  "LocaleSwitcher": {
+    "label": "Lingua"
+  },
+  "Header": {
+    "tagline": "file encryption utility",
+    "description": "Nasconde il contenuto dei tuoi file dietro una password. Nessuna compressione, nessuna modifica: solo cifratura e decifratura.",
+    "encryptTab": "Cripta",
+    "decryptTab": "Decripta"
+  },
+  "MultiFileDropzone": {
+    "drag": "Trascina {label} qui o",
+    "browse": "selezionali",
+    "anyFileType": "Qualsiasi tipo di file"
+  },
+  "FileNameField": {
+    "label": "Nome file cifrato",
+    "placeholder": "Nome file",
+    "description": "Il file cifrato viene salvato con questo nome.",
+    "regenerate": "Genera un nuovo nome"
+  },
+  "PasswordField": {
+    "placeholder": "••••••••••",
+    "show": "Mostra password",
+    "hide": "Nascondi password"
+  },
+  "EncryptPanel": {
+    "dropzoneLabel": "file",
+    "descriptionLabel": "Descrizione (opzionale)",
+    "descriptionPlaceholder": "Breve descrizione del contenuto",
+    "passwordLabel": "Password",
+    "confirmPasswordLabel": "Conferma password",
+    "passwordMismatch": "Le password non coincidono.",
+    "disclaimer": "La password protegge la chiave simmetrica usata per cifrare e decifrare il file. Senza questa password il file non potrà essere recuperato.",
+    "submit": "Cripta file",
+    "submitting": "Cifratura in corso…",
+    "empty": "Nessun file aggiunto.",
+    "needsPassword": "Inserisci una password per includere questo file.",
+    "rowError": "Errore durante la cifratura.",
+    "retry": "Riprova",
+    "download": "Scarica",
+    "remove": "Rimuovi file"
+  },
+  "DecryptPanel": {
+    "dropzoneLabel": "file cifrati",
+    "passwordLabel": "Password",
+    "submit": "Decripta file",
+    "submitting": "Decifratura in corso…",
+    "empty": "Nessun file aggiunto.",
+    "metadataFileName": "Nome file",
+    "metadataMimeType": "Tipo",
+    "metadataDescription": "Descrizione",
+    "downloadAction": "Decripta e scarica",
+    "downloading": "Decifratura in corso…",
+    "remove": "Rimuovi file",
+    "retryLabel": "Password",
+    "retrySubmit": "Riprova",
+    "invalidFile": "File non valido.",
+    "wrongPassword": "Password errata o file corrotto.",
+    "generic": "Errore durante la decifratura del file."
+  }
+}

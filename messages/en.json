@@ -1,0 +1,62 @@
+{
+  "LocaleSwitcher": {
+    "label": "Language"
+  },
+  "Header": {
+    "tagline": "file encryption utility",
+    "description": "Hides your file contents behind a password. No compression, no modifications: just encryption and decryption.",
+    "encryptTab": "Encrypt",
+    "decryptTab": "Decrypt"
+  },
+  "MultiFileDropzone": {
+    "drag": "Drag {label} here or",
+    "browse": "browse",
+    "anyFileType": "Any file type"
+  },
+  "FileNameField": {
+    "label": "Encrypted file name",
+    "placeholder": "File name",
+    "description": "The encrypted file is saved with this name.",
+    "regenerate": "Generate a new name"
+  },
+  "PasswordField": {
+    "placeholder": "••••••••••",
+    "show": "Show password",
+    "hide": "Hide password"
+  },
+  "EncryptPanel": {
+    "dropzoneLabel": "files",
+    "descriptionLabel": "Description (optional)",
+    "descriptionPlaceholder": "Brief description of the content",
+    "passwordLabel": "Password",
+    "confirmPasswordLabel": "Confirm password",
+    "passwordMismatch": "Passwords do not match.",
+    "disclaimer": "The password protects the symmetric key used to encrypt and decrypt the file. Without this password the file cannot be recovered.",
+    "submit": "Encrypt files",
+    "submitting": "Encrypting…",
+    "empty": "No files added yet.",
+    "needsPassword": "Enter a password to include this file.",
+    "rowError": "Error during encryption.",
+    "retry": "Retry",
+    "download": "Download",
+    "remove": "Remove file"
+  },
+  "DecryptPanel": {
+    "dropzoneLabel": "encrypted files",
+    "passwordLabel": "Password",
+    "submit": "Decrypt files",
+    "submitting": "Decrypting…",
+    "empty": "No files added yet.",
+    "metadataFileName": "File name",
+    "metadataMimeType": "Type",
+    "metadataDescription": "Description",
+    "downloadAction": "Decrypt & download",
+    "downloading": "Decrypting…",
+    "remove": "Remove file",
+    "retryLabel": "Password",
+    "retrySubmit": "Retry",
+    "invalidFile": "Invalid file.",
+    "wrongPassword": "Wrong password or corrupted file.",
+    "generic": "Error while decrypting file."
+  }
+}

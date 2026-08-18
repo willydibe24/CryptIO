@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+    <defs>
+        <linearGradient id="bgGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#0f172a" />
+            <stop offset="100%" stop-color="#020617" />
+        </linearGradient>
+
+        <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#1e293b" />
+            <stop offset="100%" stop-color="#0f172a" />
+        </linearGradient>
+
+        <linearGradient id="cyanNeon" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#38bdf8" />
+            <stop offset="100%" stop-color="#0284c7" />
+        </linearGradient>
+
+        <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="8" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        </filter>
+    </defs>
+
+    <rect width="512" height="512" rx="112" fill="url(#bgGlow)" />
+
+    <path d="M 186 190 V 136 A 70 70 0 0 1 326 136 V 190"
+          fill="none"
+          stroke="url(#cyanNeon)"
+          stroke-width="28"
+          stroke-linecap="round" />
+
+    <path d="M 128 180 H 384 V 280 C 384 370 256 436 256 436 C 256 436 128 370 128 280 Z"
+          fill="url(#shieldGrad)"
+          stroke="url(#cyanNeon)"
+          stroke-width="12"
+          stroke-linejoin="round" />
+
+    <path d="M 310 242 A 64 64 0 1 0 310 318"
+          fill="none"
+          stroke="#00f2fe"
+          stroke-width="32"
+          stroke-linecap="round"
+          filter="url(#glow)" />
+
+    <circle cx="310" cy="242" r="10" fill="#ffffff" filter="url(#glow)" />
+    <circle cx="310" cy="318" r="10" fill="#ffffff" filter="url(#glow)" />
+</svg>
