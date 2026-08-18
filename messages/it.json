@@ -52,6 +52,8 @@
     "metadataDescription": "Descrizione",
     "downloadAction": "Decripta e scarica",
     "downloading": "Decifratura in corso…",
+    "viewAction": "Decripta e visualizza",
+    "viewing": "Decifratura in corso…",
     "remove": "Rimuovi file",
     "retryLabel": "Password",
     "retrySubmit": "Riprova",

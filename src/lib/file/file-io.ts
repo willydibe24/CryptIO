@@ -10,6 +10,12 @@ export function downloadBinary(data: Uint8Array<ArrayBuffer>, filename: string, 
     triggerDownload(new Blob([data], { type: mimeType }), filename);
 }
 
+export function openBinaryInNewWindow(win: Window, data: Uint8Array<ArrayBuffer>, mimeType: string): void {
+    const url = URL.createObjectURL(new Blob([data], { type: mimeType }));
+    win.location.href = url;
+    setTimeout(() => URL.revokeObjectURL(url), 60_000);
+}
+
 function triggerDownload(blob: Blob, filename: string): void {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");

@@ -10,7 +10,7 @@ import { MultiFileDropzone } from "../../file/multi-file-dropzone";
 import { PasswordField } from "../password-field";
 import { DecryptFileRow, type DecryptItem } from "./decrypt-file-row";
 import { decryptFile, inspectMetadata } from "@/lib/domain/crypto-file/crypto";
-import { downloadBinary, readFileAsBytes } from "@/lib/file/file-io";
+import { downloadBinary, openBinaryInNewWindow, readFileAsBytes } from "@/lib/file/file-io";
 import { classifyDecryptError } from "@/lib/domain/errors/classify-decrypt-error";
 
 export function DecryptPanel() {
@@ -32,6 +32,7 @@ export function DecryptPanel() {
                 retryPassword: "",
                 retrying: false,
                 downloading: false,
+                viewing: false,
             })),
         ]);
     }
@@ -50,6 +51,24 @@ export function DecryptPanel() {
         }
         finally {
             setItems((prev) => prev.map((i) => (i.id === id ? { ...i, downloading: false } : i)));
+        }
+    }
+
+    async function performView(id: string, file: File, filePassword: string, win: Window | null) {
+        setItems((prev) => prev.map((i) => (i.id === id ? { ...i, viewing: true, viewError: undefined } : i)));
+        try {
+            const container = await readFileAsBytes(file);
+            const { metadata, data } = await decryptFile(container, filePassword);
+            if (win) openBinaryInNewWindow(win, data, metadata.mimeType);
+        }
+        catch (err) {
+            win?.close();
+            setItems((prev) => prev.map((i) =>
+                i.id === id ? { ...i, viewError: classifyDecryptError(err) } : i,
+            ));
+        }
+        finally {
+            setItems((prev) => prev.map((i) => (i.id === id ? { ...i, viewing: false } : i)));
         }
     }
 
@@ -111,6 +130,13 @@ export function DecryptPanel() {
         await performDownload(id, item.file, item.resolvedPassword);
     }
 
+    function handleView(id: string) {
+        const item = items.find((i) => i.id === id);
+        if (!item || !item.resolvedPassword) return;
+        const win = window.open("", "_blank");
+        void performView(id, item.file, item.resolvedPassword, win);
+    }
+
     function handleRemove(id: string) {
         setItems((prev) => prev.filter((i) => i.id !== id));
     }
@@ -146,6 +172,7 @@ export function DecryptPanel() {
                             onRetryPasswordChange={handleRetryPasswordChange}
                             onRetry={handleRetry}
                             onDownload={handleDownload}
+                            onView={handleView}
                             onRemove={handleRemove}
                         />
                     ))}

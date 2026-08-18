@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle2, Download, Loader2, RotateCw, X } from "lucide-react";
+import { CheckCircle2, Download, ExternalLink, Loader2, RotateCw, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
@@ -20,6 +20,8 @@ export interface DecryptItem {
     retrying: boolean;
     downloading: boolean;
     downloadError?: DecryptErrorKind;
+    viewing: boolean;
+    viewError?: DecryptErrorKind;
 }
 
 export function DecryptFileRow({
@@ -27,12 +29,14 @@ export function DecryptFileRow({
     onRetryPasswordChange,
     onRetry,
     onDownload,
+    onView,
     onRemove,
 }: {
     item: DecryptItem;
     onRetryPasswordChange: (id: string, value: string) => void;
     onRetry: (id: string) => void;
     onDownload: (id: string) => void;
+    onView: (id: string) => void;
     onRemove: (id: string) => void;
 }) {
     const t = useTranslations("DecryptPanel");
@@ -73,18 +77,33 @@ export function DecryptFileRow({
                             </>
                         )}
                     </dl>
-                    <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        disabled={item.downloading}
-                        onClick={() => onDownload(item.id)}
-                    >
-                        <Download className="h-3.5 w-3.5"/>
-                        {item.downloading ? t("downloading") : t("downloadAction")}
-                    </Button>
+                    <div className="flex flex-wrap gap-2">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            disabled={item.downloading}
+                            onClick={() => onDownload(item.id)}
+                        >
+                            <Download className="h-3.5 w-3.5"/>
+                            {item.downloading ? t("downloading") : t("downloadAction")}
+                        </Button>
+                        <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            disabled={item.viewing}
+                            onClick={() => onView(item.id)}
+                        >
+                            <ExternalLink className="h-3.5 w-3.5"/>
+                            {item.viewing ? t("viewing") : t("viewAction")}
+                        </Button>
+                    </div>
                     {item.downloadError && (
                         <p className="text-sm text-destructive">{t(item.downloadError)}</p>
+                    )}
+                    {item.viewError && (
+                        <p className="text-sm text-destructive">{t(item.viewError)}</p>
                     )}
                 </div>
             )}

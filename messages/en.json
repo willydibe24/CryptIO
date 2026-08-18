@@ -52,6 +52,8 @@
     "metadataDescription": "Description",
     "downloadAction": "Decrypt & download",
     "downloading": "Decrypting…",
+    "viewAction": "Decrypt & view",
+    "viewing": "Decrypting…",
     "remove": "Remove file",
     "retryLabel": "Password",
     "retrySubmit": "Retry",
