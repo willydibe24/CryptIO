@@ -106,7 +106,8 @@ export function EncryptPanel() {
                     onFilesSelected={handleFilesSelected}
                     accentBorderClassName="border-[var(--encrypt)]"
                     inputId="encrypt-file-input"
-                    label={t("dropzoneLabel")}
+                    titleLabel={t("dropzoneLabel")}
+                    description={t("anyFileType")}
                 />
             </FieldGroup>
 

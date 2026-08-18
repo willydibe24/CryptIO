@@ -152,7 +152,8 @@ export function DecryptPanel() {
                     onFilesSelected={handleFilesSelected}
                     accentBorderClassName="border-[var(--decrypt)]"
                     inputId="decrypt-file-input"
-                    label={t("dropzoneLabel")}
+                    titleLabel={t("dropzoneLabel")}
+                    description={t("onlyEncryptedFileType")}
                 />
                 <PasswordField
                     id="decrypt-password"

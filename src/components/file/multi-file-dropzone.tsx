@@ -9,12 +9,14 @@ export function MultiFileDropzone({
     onFilesSelected,
     accentBorderClassName,
     inputId,
-    label,
+    titleLabel,
+    description,
 }: {
     onFilesSelected: (files: File[]) => void;
     accentBorderClassName: string;
     inputId: string;
-    label: string;
+    titleLabel: string;
+    description: string;
 }) {
     const t = useTranslations("MultiFileDropzone");
     const [isDragging, setIsDragging] = useState(false);
@@ -47,9 +49,9 @@ export function MultiFileDropzone({
         >
             <Upload className="h-5 w-5 text-muted-foreground" aria-hidden="true"/>
             <span className="text-sm text-foreground/80">
-                {t("drag", { label })} <span className="underline">{t("browse")}</span>
+                {t("drag", { label: titleLabel })} <span className="underline">{t("browse")}</span>
             </span>
-            <span className="text-xs text-muted-foreground">{t("anyFileType")}</span>
+            <span className="text-xs text-muted-foreground">{description}</span>
             <input id={inputId} type="file" multiple className="sr-only" onChange={handleChange}/>
         </label>
     );

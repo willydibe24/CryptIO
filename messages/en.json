@@ -10,8 +10,7 @@
   },
   "MultiFileDropzone": {
     "drag": "Drag {label} here or",
-    "browse": "browse",
-    "anyFileType": "Any file type"
+    "browse": "browse"
   },
   "FileNameField": {
     "label": "Encrypted file name",
@@ -25,6 +24,7 @@
     "hide": "Hide password"
   },
   "EncryptPanel": {
+    "anyFileType": "Any file type",
     "dropzoneLabel": "files",
     "descriptionLabel": "Description (optional)",
     "descriptionPlaceholder": "Brief description of the content",
@@ -50,6 +50,7 @@
     "metadataFileName": "File name",
     "metadataMimeType": "Type",
     "metadataDescription": "Description",
+    "onlyEncryptedFileType": "Only .crypto files",
     "downloadAction": "Decrypt & download",
     "downloading": "Decrypting…",
     "viewAction": "Decrypt & view",
