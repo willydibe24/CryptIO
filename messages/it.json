@@ -39,6 +39,8 @@
     "rowError": "Errore durante la cifratura.",
     "retry": "Riprova",
     "download": "Scarica",
+    "downloadAll": "Scarica tutto (.zip)",
+    "downloadingAll": "Creazione zip…",
     "remove": "Rimuovi file"
   },
   "DecryptPanel": {

@@ -2,14 +2,14 @@
 
 import type { FormEvent } from "react";
 import { useState } from "react";
-import { Lock } from "lucide-react";
+import { Archive, Lock } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
 import { MultiFileDropzone } from "../../file/multi-file-dropzone";
 import { EncryptFileRow, type EncryptItem } from "./encrypt-file-row";
 import { encryptFile } from "@/lib/domain/crypto-file/crypto";
-import { downloadBinary } from "@/lib/file/file-io";
+import { downloadBinary, downloadZip } from "@/lib/file/file-io";
 import { ENCRYPTED_FILE_EXTENSION, generateFileName } from "@/lib/file/file-utils";
 
 function isRowReady(item: EncryptItem): boolean {
@@ -20,8 +20,13 @@ export function EncryptPanel() {
     const t = useTranslations("EncryptPanel");
     const [items, setItems] = useState<EncryptItem[]>([]);
     const [submitting, setSubmitting] = useState(false);
+    const [downloadingAll, setDownloadingAll] = useState(false);
 
     const canSubmit = items.some((i) => (i.status === "pending" || i.status === "error") && isRowReady(i));
+    const downloadableItems = items.filter(
+        (i): i is EncryptItem & { encryptedContainer: Uint8Array<ArrayBuffer> } =>
+            i.status === "success" && !i.downloaded && i.encryptedContainer !== undefined,
+    );
 
     function handleFilesSelected(files: File[]) {
         setItems((prev) => [
@@ -99,6 +104,32 @@ export function EncryptPanel() {
         setItems((prev) => prev.filter((i) => i.id !== id));
     }
 
+    async function handleDownloadAll() {
+        if (downloadableItems.length === 0) return;
+
+        const usedNames = new Set<string>();
+        const entries = downloadableItems.map((item) => {
+            let name = `${item.fileName}.${ENCRYPTED_FILE_EXTENSION}`;
+            let suffix = 2;
+            while (usedNames.has(name)) {
+                name = `${item.fileName} (${suffix}).${ENCRYPTED_FILE_EXTENSION}`;
+                suffix++;
+            }
+            usedNames.add(name);
+            return { name, data: item.encryptedContainer };
+        });
+        const downloadedIds = new Set(downloadableItems.map((i) => i.id));
+
+        setDownloadingAll(true);
+        try {
+            await downloadZip(entries, "cryptio-files.zip");
+            setItems((prev) => prev.map((i) => (downloadedIds.has(i.id) ? { ...i, downloaded: true } : i)));
+        }
+        finally {
+            setDownloadingAll(false);
+        }
+    }
+
     return (
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
             <FieldGroup>
@@ -126,6 +157,21 @@ export function EncryptPanel() {
                 </ul>
             ) : (
                 <p className="text-sm text-muted-foreground">{t("empty")}</p>
+            )}
+
+            {downloadableItems.length > 0 && (
+                <div className="flex justify-end">
+                    <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        disabled={downloadingAll}
+                        onClick={handleDownloadAll}
+                    >
+                        <Archive className="h-3.5 w-3.5"/>
+                        {downloadingAll ? t("downloadingAll") : t("downloadAll")}
+                    </Button>
+                </div>
             )}
 
             <p className="text-xs text-muted-foreground">{t("disclaimer")}</p>

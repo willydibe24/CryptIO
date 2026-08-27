@@ -39,6 +39,8 @@
     "rowError": "Error during encryption.",
     "retry": "Retry",
     "download": "Download",
+    "downloadAll": "Download all (.zip)",
+    "downloadingAll": "Zipping…",
     "remove": "Remove file"
   },
   "DecryptPanel": {
