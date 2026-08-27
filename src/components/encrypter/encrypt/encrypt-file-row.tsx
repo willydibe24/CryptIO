@@ -1,13 +1,15 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { CheckCircle2, Download, Loader2, RotateCw, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { FileNameField } from "../../file/file-name-field";
+import { MediaPreview } from "../../file/media-preview";
 import { PasswordField } from "../password-field";
-import { ENCRYPTED_FILE_EXTENSION, formatBytes } from "@/lib/file/file-utils";
+import { ENCRYPTED_FILE_EXTENSION, formatBytes, getPreviewKind } from "@/lib/file/file-utils";
 
 export interface EncryptItem {
     id: string;
@@ -38,12 +40,29 @@ export function EncryptFileRow({
     const passwordsMismatch = item.confirmPassword.length > 0 && item.password !== item.confirmPassword;
     const needsPassword = item.password.length === 0;
 
+    const previewKind = getPreviewKind(item.file.type);
+
+    const [previewUrl, setPreviewUrl] = useState<string>();
+
+    useEffect(() => {
+        if (!previewKind) return;
+        const url = URL.createObjectURL(item.file);
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- object URL creation and revocation must be paired within the same effect run, so a Strict Mode remount revokes only the URL it created
+        setPreviewUrl(url);
+        return () => URL.revokeObjectURL(url);
+    }, [item.file, previewKind]);
+
     return (
         <li className="rounded-md border bg-muted/40 px-4 py-3">
             <div className="flex items-center justify-between gap-3">
-                <div className="min-w-0">
-                    <p className="truncate font-mono text-sm">{item.file.name}</p>
-                    <p className="mt-0.5 text-xs text-muted-foreground">{formatBytes(item.file.size)}</p>
+                <div className="flex min-w-0 items-center gap-3">
+                    {previewKind && previewUrl && (
+                        <MediaPreview kind={previewKind} src={previewUrl} alt={item.file.name} className="h-10 w-10 shrink-0"/>
+                    )}
+                    <div className="min-w-0">
+                        <p className="truncate font-mono text-sm">{item.file.name}</p>
+                        <p className="mt-0.5 text-xs text-muted-foreground">{formatBytes(item.file.size)}</p>
+                    </div>
                 </div>
                 <div className="flex shrink-0 items-center gap-1">
                     {item.status === "encrypting" && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground"/>}

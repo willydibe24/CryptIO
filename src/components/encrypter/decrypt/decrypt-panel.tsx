@@ -11,6 +11,7 @@ import { PasswordField } from "../password-field";
 import { DecryptFileRow, type DecryptItem } from "./decrypt-file-row";
 import { decryptFile, inspectMetadata } from "@/lib/domain/crypto-file/crypto";
 import { downloadBinary, openBinaryInNewWindow, readFileAsBytes } from "@/lib/file/file-io";
+import { getPreviewKind } from "@/lib/file/file-utils";
 import { classifyDecryptError } from "@/lib/domain/errors/classify-decrypt-error";
 
 export function DecryptPanel() {
@@ -60,6 +61,14 @@ export function DecryptPanel() {
             const container = await readFileAsBytes(file);
             const { metadata, data } = await decryptFile(container, filePassword);
             if (win) openBinaryInNewWindow(win, data, metadata.mimeType);
+            if (getPreviewKind(metadata.mimeType)) {
+                const url = URL.createObjectURL(new Blob([data], { type: metadata.mimeType }));
+                setItems((prev) => prev.map((i) => {
+                    if (i.id !== id) return i;
+                    if (i.previewUrl) URL.revokeObjectURL(i.previewUrl);
+                    return { ...i, previewUrl: url };
+                }));
+            }
         }
         catch (err) {
             win?.close();
@@ -138,7 +147,11 @@ export function DecryptPanel() {
     }
 
     function handleRemove(id: string) {
-        setItems((prev) => prev.filter((i) => i.id !== id));
+        setItems((prev) => {
+            const item = prev.find((i) => i.id === id);
+            if (item?.previewUrl) URL.revokeObjectURL(item.previewUrl);
+            return prev.filter((i) => i.id !== id);
+        });
     }
 
     function handleRetryPasswordChange(id: string, value: string) {

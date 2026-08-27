@@ -4,8 +4,9 @@ import { CheckCircle2, Download, ExternalLink, Loader2, RotateCw, X } from "luci
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
+import { MediaPreview } from "../../file/media-preview";
 import { PasswordField } from "../password-field";
-import { formatBytes } from "@/lib/file/file-utils";
+import { formatBytes, getPreviewKind } from "@/lib/file/file-utils";
 import type { FileMetadata } from "@/lib/domain/schema/file.schema";
 import type { DecryptErrorKind } from "@/lib/domain/errors/classify-decrypt-error";
 
@@ -22,6 +23,7 @@ export interface DecryptItem {
     downloadError?: DecryptErrorKind;
     viewing: boolean;
     viewError?: DecryptErrorKind;
+    previewUrl?: string;
 }
 
 export function DecryptFileRow({
@@ -40,13 +42,19 @@ export function DecryptFileRow({
     onRemove: (id: string) => void;
 }) {
     const t = useTranslations("DecryptPanel");
+    const previewKind = item.metadata ? getPreviewKind(item.metadata.mimeType) : undefined;
 
     return (
         <li className="rounded-md border bg-muted/40 px-4 py-3">
             <div className="flex items-center justify-between gap-3">
-                <div className="min-w-0">
-                    <p className="truncate font-mono text-sm">{item.file.name}</p>
-                    <p className="mt-0.5 text-xs text-muted-foreground">{formatBytes(item.file.size)}</p>
+                <div className="flex min-w-0 items-center gap-3">
+                    {previewKind && item.previewUrl && (
+                        <MediaPreview kind={previewKind} src={item.previewUrl} alt={item.metadata?.fileName ?? item.file.name} className="h-10 w-10 shrink-0"/>
+                    )}
+                    <div className="min-w-0">
+                        <p className="truncate font-mono text-sm">{item.file.name}</p>
+                        <p className="mt-0.5 text-xs text-muted-foreground">{formatBytes(item.file.size)}</p>
+                    </div>
                 </div>
                 <div className="flex shrink-0 items-center gap-1">
                     {item.status === "decrypting" && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground"/>}

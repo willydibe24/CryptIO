@@ -1,5 +1,13 @@
 export const ENCRYPTED_FILE_EXTENSION = "cryptio";
 
+export type PreviewKind = "image" | "video";
+
+export function getPreviewKind(mimeType: string): PreviewKind | undefined {
+    if (mimeType.startsWith("image/")) return "image";
+    if (mimeType.startsWith("video/")) return "video";
+    return undefined;
+}
+
 export function generateFileName(): string {
     return crypto.randomUUID();
 }
