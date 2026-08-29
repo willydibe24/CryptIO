@@ -2,10 +2,11 @@
 
 import type { FormEvent } from "react";
 import { useState } from "react";
-import { Unlock } from "lucide-react";
+import { Search, Unlock, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group";
 import { MultiFileDropzone } from "../../file/multi-file-dropzone";
 import { PasswordField } from "../password-field";
 import { DecryptFileRow, type DecryptItem } from "./decrypt-file-row";
@@ -19,9 +20,15 @@ export function DecryptPanel() {
     const [items, setItems] = useState<DecryptItem[]>([]);
     const [password, setPassword] = useState("");
     const [submitting, setSubmitting] = useState(false);
+    const [descriptionQuery, setDescriptionQuery] = useState("");
 
     const pendingCount = items.filter((i) => i.status === "pending" || i.status === "error").length;
     const canSubmit = pendingCount > 0 && password.length > 0;
+
+    const normalizedQuery = descriptionQuery.trim().toLowerCase();
+    const visibleItems = normalizedQuery
+        ? items.filter((i) => i.status !== "success" || i.metadata?.description?.toLowerCase().includes(normalizedQuery))
+        : items;
 
     function handleFilesSelected(files: File[]) {
         setItems((prev) => [
@@ -177,20 +184,48 @@ export function DecryptPanel() {
                 />
             </FieldGroup>
 
+            {items.length > 0 && (
+                <InputGroup>
+                    <InputGroupAddon>
+                        <Search className="h-4 w-4"/>
+                    </InputGroupAddon>
+                    <InputGroupInput
+                        aria-label={t("searchLabel")}
+                        placeholder={t("searchPlaceholder")}
+                        value={descriptionQuery}
+                        onChange={(e) => setDescriptionQuery(e.target.value)}
+                    />
+                    {descriptionQuery.length > 0 && (
+                        <InputGroupAddon align="inline-end">
+                            <InputGroupButton
+                                aria-label={t("clearSearch")}
+                                onClick={() => setDescriptionQuery("")}
+                            >
+                                <X className="h-3.5 w-3.5"/>
+                            </InputGroupButton>
+                        </InputGroupAddon>
+                    )}
+                </InputGroup>
+            )}
+
             {items.length > 0 ? (
-                <ul className="flex flex-col gap-2">
-                    {items.map((item) => (
-                        <DecryptFileRow
-                            key={item.id}
-                            item={item}
-                            onRetryPasswordChange={handleRetryPasswordChange}
-                            onRetry={handleRetry}
-                            onDownload={handleDownload}
-                            onView={handleView}
-                            onRemove={handleRemove}
-                        />
-                    ))}
-                </ul>
+                visibleItems.length > 0 ? (
+                    <ul className="flex flex-col gap-2">
+                        {visibleItems.map((item) => (
+                            <DecryptFileRow
+                                key={item.id}
+                                item={item}
+                                onRetryPasswordChange={handleRetryPasswordChange}
+                                onRetry={handleRetry}
+                                onDownload={handleDownload}
+                                onView={handleView}
+                                onRemove={handleRemove}
+                            />
+                        ))}
+                    </ul>
+                ) : (
+                    <p className="text-sm text-muted-foreground">{t("noSearchResults")}</p>
+                )
             ) : (
                 <p className="text-sm text-muted-foreground">{t("empty")}</p>
             )}
